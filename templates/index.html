@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Price API</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        async function fetchCryptoData() {
+            const asset = document.getElementById('cryptoInput').value.toUpperCase(); // Force input to uppercase
+
+            // Check if the asset is either BTC or ETH
+            if (asset !== 'BTC' && asset !== 'ETH') {
+                alert('Please enter BTC or ETH');
+                return;
+            }
+
+            // Fetch data from the API
+            try {
+                const response = await fetch(`/crypto?asset=${asset}`);
+                const data = await response.json();
+
+                // Display the result
+                document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Crypto Price API</h1>
+        <label for="cryptoInput">Enter digital asset (BTC or ETH): </label>
+        <input type="text" id="cryptoInput" name="cryptoInput" placeholder="BTC or ETH">
+        <button onclick="fetchCryptoData()">Get Crypto Data</button>
+        <pre id="result"></pre>
+    </div>
+</body>
+
+</html>
