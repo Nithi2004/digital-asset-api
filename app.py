@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, render_template
 import random
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
@@ -12,6 +13,12 @@ def home():
 @app.route('/crypto', methods=['GET'])
 def get_crypto_values():
     asset = request.args.get('asset').upper()  # Convert to uppercase for consistency
+    
+    # Get current date and time
+    current_datetime = datetime.now()
+    
+    # Add 24 hours to current date and time
+    prediction_expiry_timestamp = current_datetime + timedelta(hours=24)
 
     if asset == 'BTC':
         # Generate random float values for Bitcoin
@@ -21,7 +28,9 @@ def get_crypto_values():
             'digital_asset': 'BTC',
             'digital_asset_name': 'Bitcoin',
             'digital_asset_price': bitcoin_price,
-            'digital_asset_next_24_hour_volume(in B)': bitcoin_volume
+            'digital_asset_next_24_hour_volume(in B)': bitcoin_volume,
+            'current_time_stamp': current_datetime.strftime("%Y-%m-%d %H:%M:%S"),
+            'prediction_expiry_timestamp': prediction_expiry_timestamp.strftime("%Y-%m-%d %H:%M:%S")
         }
         return jsonify(crypto_data)
     
@@ -33,7 +42,9 @@ def get_crypto_values():
             'digital_asset': 'ETH',
             'digital_asset_name': 'Ethereum',
             'digital_asset_price': ethereum_price,
-            'digital_asset_next_24_hour_volume(in B)': ethereum_volume
+            'digital_asset_next_24_hour_volume(in B)': ethereum_volume,
+            'current_time_stamp': current_datetime.strftime("%Y-%m-%d %H:%M:%S"),
+            'prediction_expiry_timestamp': prediction_expiry_timestamp.strftime("%Y-%m-%d %H:%M:%S")
         }
         return jsonify(crypto_data)
     
